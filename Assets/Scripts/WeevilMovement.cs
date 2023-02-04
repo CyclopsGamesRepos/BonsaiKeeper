@@ -13,7 +13,7 @@ public class WeevilMovement : MonoBehaviour
     AudioSource audioSource;
     [SerializeField] AudioClip audioClip;
     bool audioPlayed;
-    float deathOffset = 0.25f;
+    float deathOffset = 0.35f;
     float pan;
     float pitch;
 
@@ -26,7 +26,7 @@ public class WeevilMovement : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         audioClip = GetComponent<AudioClip>();
         audioPlayed = false;
-        pitch = Random.Range(0.8f, 2.4f);
+        pitch = Random.Range(0.8f, 1.1f);
 
     } // Start
 
