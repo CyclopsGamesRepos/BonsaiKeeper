@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using static UnityEngine.Rendering.DebugUI.Table;
 
 public class RootGenerator : MonoBehaviour
@@ -16,15 +17,17 @@ public class RootGenerator : MonoBehaviour
 
     public enum RootTypes
     {
-        Vertical,               // can transition to Vertical, Double or VerticalEnd
-        Double,                 // can transition to Horizontals, Elbow, LeftEnd or RightEnd (does it twice)
+        Vertical,               // can transition to Vertical, Split or VerticalEnd
+        Split,                  // can transition to Horizontals, Elbow, LeftEnd or RightEnd (does it twice)
         HorizontalLeft,         // can transitions to HorizontalLeft, Elbow or LeftEnd
         HorizontalRight,        // can transitions to HorizontalRight, Elbow or RightEnd
-        ElbowLeft,              // can transistion to Vertical, Double or VerticalEnd
-        ElbowRight,             // can transistion to Vertical, Double or VerticalEnd
+        ElbowLeft,              // can transistion to Vertical, Split or VerticalEnd
+        ElbowRight,             // can transistion to Vertical, Split or VerticalEnd
         VerticalEnd,            // no transision, root is stopped here
         LeftEnd,                // no transision, root is stopped here
-        RightEnd                // no transision, root is stopped here
+        RightEnd,               // no transision, root is stopped here
+        SplitLeftEnd,           // no transision, root is stopped here
+        SplitRightEnd,          // no transision, root is stopped here
     }
 
     class RootNode<T>
@@ -42,12 +45,13 @@ public class RootGenerator : MonoBehaviour
     // constant values for creating roots
     private static float MIN_TIME = 0.5f;
     private static float MAX_TIME = 2.5f;
-    private static float ROOT_CHANCE = 0.5f;
+    private static float HORIZONTAL_CHANCE = 0.65f;
     private static int ROOT_START_COL = 17;
 
     // constant values for setting up the ground sprites
     private static int GROUND_START_PIXEL_X = 208;
     private static int GROUND_START_PIXEL_Y = 360;
+    private static int GROUND_Z_OFFSET = 5;
     private static int GROUND_WIDTH = 36;
     private static int GROUND_HEIGHT = 15;
     private static int GROUND_SPRITE_SIZE = 24;          // ground sprites size in pixels (24x24)
@@ -107,7 +111,7 @@ public class RootGenerator : MonoBehaviour
                     {
                         switch (groundRoots[row, col].type)
                         {
-                            // can transition to Vertical, Double or VerticalEnd
+                            // can transition to Vertical, Split or VerticalEnd
                             case RootTypes.Vertical:
                             case RootTypes.ElbowLeft:
                             case RootTypes.ElbowRight:
@@ -115,7 +119,7 @@ public class RootGenerator : MonoBehaviour
                                 break;
 
                             // can transition to Horizontal, Elbow, LeftEnd or RightEnd
-                            case RootTypes.Double:
+                            case RootTypes.Split:
                                 GrowHorizontalRoot(groundRoots[row, col], row, col, true);
                                 GrowHorizontalRoot(groundRoots[row, col], row, col, false);
                                 break;
@@ -141,6 +145,56 @@ public class RootGenerator : MonoBehaviour
     } // end Update
 
     /// <summary>
+    /// Prunes the roots at the given location in the ground array
+    /// </summary>
+    /// <param name="row"></param>
+    /// <param name="col"></param>
+    public void DoPrune(int row, int col)
+    {
+        // set parent node to growable again
+        groundRoots[row, col].Parent.grown = false;
+        groundRoots[row, col].Parent.timeToGrow = Random.Range(MIN_TIME, MAX_TIME);
+
+        // cut this node and all following nodes (replacing them with the ground soil sprite)
+        PruneRoot(row, col);
+
+    } // end DoPrune
+
+    private void PruneRoot(int row, int col)
+    {
+        // gram the sprite and root object so we can prune it and its children
+        GameObject rootToPrune = groundSprites[row, col];
+        RootNode<RootTypes> rootNode = groundRoots[row, col];
+
+        if (rootNode != null)
+        {
+            // check child left
+            if (rootNode.Left != null)
+            {
+                PruneRoot(row, col - 1);
+            }
+
+            // check child below
+            if (rootNode.Down != null)
+            {
+                PruneRoot(row + 1, col);
+            }
+
+            // check child right
+            if (rootNode.Right != null)
+            {
+                PruneRoot(row, col + 1);
+            }
+        }
+
+        // replace this root with soil
+        groundRoots[row, col] = null;
+        groundSprites[row, col] = Instantiate(soilSprite, rootToPrune.transform.position, Quaternion.identity);
+        Destroy(rootToPrune);
+
+    } // end PruneRoot
+
+    /// <summary>
     /// grows the current root horizontally based on the grow criteria
     /// </summary>
     /// <param name="rootToGrow">the current root node to be grown</param>
@@ -157,7 +211,7 @@ public class RootGenerator : MonoBehaviour
         RootNode<RootTypes> newRoot = new RootNode<RootTypes>();
 
         // set up column and new root based on which way we are growing
-        float randomChance = Random.Range(-MIN_TIME, MAX_TIME);
+        float randomChance = Random.Range(0f, 1f);
         RootTypes newRootType;
         int colToCheck;
 
@@ -166,7 +220,7 @@ public class RootGenerator : MonoBehaviour
             colToCheck = col - 1;
 
             // randomize wether we do a horizontal left or an elbow
-            if (randomChance < ROOT_CHANCE) {
+            if (randomChance < HORIZONTAL_CHANCE) {
                 newRootType = RootTypes.HorizontalLeft;
             }
             else
@@ -179,7 +233,7 @@ public class RootGenerator : MonoBehaviour
             colToCheck = col + 1;
 
             // randomize wether we do a horizontal left or an elbow
-            if (randomChance < ROOT_CHANCE)
+            if (randomChance < HORIZONTAL_CHANCE)
             {
                 newRootType = RootTypes.HorizontalRight;
             }
@@ -193,9 +247,9 @@ public class RootGenerator : MonoBehaviour
         if (growLeft && ( (col == 0) || (groundRoots[row, colToCheck] != null) ) )
         {
             // if we are a double coming in, then does it need to change to a vertical end? Or do we need multiple doubles here?
-            if (rootToGrow.type == RootTypes.Double)
+            if (rootToGrow.type == RootTypes.Split)
             {
-                rootToGrow.type = RootTypes.VerticalEnd;
+                rootToGrow.type = RootTypes.SplitLeftEnd;
             }
             else
             {
@@ -204,14 +258,19 @@ public class RootGenerator : MonoBehaviour
 
             // make sure to update the graphics
             ChangeRootSprite((int)rootToGrow.type, row, col);
+            groundRoots[row, col].type = rootToGrow.type;
         }
         // Need to check to see if there is a node right if we are growing right and change this one to a horizontalRight stub if so
         else if (!growLeft && ( (col == GROUND_WIDTH - 1) || (groundRoots[row, colToCheck] != null) ))
         {
             // if we are a double coming in, then does it need to change to a vertical end? Or do we need multiple doubles here?
-            if (rootToGrow.type == RootTypes.Double)
+            if (rootToGrow.type == RootTypes.SplitLeftEnd)
             {
                 rootToGrow.type = RootTypes.VerticalEnd;
+            }
+            else if (rootToGrow.type == RootTypes.Split)
+            {
+                rootToGrow.type = RootTypes.SplitRightEnd;
             }
             else
             {
@@ -220,6 +279,7 @@ public class RootGenerator : MonoBehaviour
 
             // make sure to update the graphics
             ChangeRootSprite((int)rootToGrow.type, row, col);
+            groundRoots[row, col].type = rootToGrow.type;
         }
         else
         {
@@ -228,8 +288,17 @@ public class RootGenerator : MonoBehaviour
             newRoot.timeToGrow = growTimer;
 
             newRoot.Parent = rootToGrow;
-            rootToGrow.Down = newRoot;
             groundRoots[row, colToCheck] = newRoot;
+
+            // set up the root paths for pruning and infecting
+            if (growLeft)
+            {
+                rootToGrow.Left = newRoot;
+            }
+            else
+            {
+                rootToGrow.Right = newRoot;
+            }
 
             // make sure to update the graphics
             ChangeRootSprite((int)newRoot.type, row, colToCheck);
@@ -278,15 +347,14 @@ public class RootGenerator : MonoBehaviour
         else
         {
             // randomize wether we do a vertical or double
-            if (Random.Range(0f, 1f) < ROOT_CHANCE)
+            if (Random.Range(0f, 1f) < HORIZONTAL_CHANCE)
             {
-                newRoot.type = RootTypes.Vertical;
+                newRoot.type = RootTypes.Split;
                 newRoot.timeToGrow = growTimer;
             }
             else
             {
-                // TODO: Need to check left and right here to see if we can grow further, or go back to vertical?
-                newRoot.type = RootTypes.Double;
+                newRoot.type = RootTypes.Vertical;
                 newRoot.timeToGrow = growTimer;
             }
 
@@ -308,7 +376,7 @@ public class RootGenerator : MonoBehaviour
         Camera cam = Camera.main;
 
         // first get the camera screen position for where we want the ground sprites to start
-        Vector3 screenStartPosition = new Vector3(GROUND_START_PIXEL_X, GROUND_START_PIXEL_Y, cam.nearClipPlane);
+        Vector3 screenStartPosition = new Vector3(GROUND_START_PIXEL_X, GROUND_START_PIXEL_Y, GROUND_Z_OFFSET);
         Vector3 groundStartWorldPos = cam.ScreenToWorldPoint(screenStartPosition);
 
         // move this sprite to that position
@@ -321,8 +389,8 @@ public class RootGenerator : MonoBehaviour
         {
             for (int col = 0; col < GROUND_WIDTH; col++)
             {
-                Vector3 screenPosition = new Vector3( (screenStartPosition.x + col * GROUND_SPRITE_SIZE),
-                                                      (screenStartPosition.y - row * GROUND_SPRITE_SIZE),
+                Vector3 screenPosition = new Vector3( (screenStartPosition.x + (col * GROUND_SPRITE_SIZE) ),
+                                                      (screenStartPosition.y - (row * GROUND_SPRITE_SIZE) ),
                                                        screenStartPosition.z);
 
                 Vector3 spritePos = cam.ScreenToWorldPoint(screenPosition);
@@ -344,15 +412,37 @@ public class RootGenerator : MonoBehaviour
         GameObject oldGroundSprite = groundSprites[row, col];
         GameObject newGroundSprite = soilSprite;
 
+        bool isRoot = (rootToChange >= 0) && (rootToChange < rootSprites.Length);
         // if the value of the root change is not in range, we must leave it as groundSoil
-        if ( (rootToChange >= 0) && (rootToChange < rootSprites.Length) )
+        if (isRoot)
         {
             newGroundSprite = rootSprites[rootToChange];
         }
 
         groundSprites[row, col] = Instantiate(newGroundSprite, oldGroundSprite.transform.position, Quaternion.identity);
+        
+        // if it is a root - there is some additional setup for the click events
+        if (isRoot)
+        {
+            groundSprites[row, col].GetComponent<RootEventHandler>().rootGenerator = this;
+            groundSprites[row, col].GetComponent<RootEventHandler>().arrayRowPos = row;
+            groundSprites[row, col].GetComponent<RootEventHandler>().arrayColPos = col;
+
+
+            //StartCoroutine(Coroutine_Refresh(groundSprites[row, col]));
+        }
+
+        // clean up the old sprite
         Destroy(oldGroundSprite, .05f);
 
     } // end ChangeRootSprite
+
+    /*IEnumerator Coroutine_Refresh(GameObject obj)
+    {
+        BoxCollider2D box = obj.GetComponent<BoxCollider2D>();
+        box.enabled = false;
+        yield return new WaitForSeconds(1f);
+        box.enabled = true;
+    }*/
 
 }
