@@ -10,13 +10,12 @@ public class AudioManager : MonoBehaviour
     public Sound[] sounds;
 
     public static AudioManager instance;
-    bool normalTheme, dangerTheme, zenTheme;
-    bool normalPlayed, dangerPlayed, zenPlayed;
+    bool mainTheme, dangerTheme, zenTheme;
+    bool mainPlayed, dangerPlayed, zenPlayed;
 
     // instructions:
     // key 1 - 2 audio hits
     // keys 3 - 5 audio loop themes
-
 
     //create an audio source and add to an array
     //---------
@@ -71,19 +70,19 @@ public class AudioManager : MonoBehaviour
 
 
         //---------------------------------
-        if (normalTheme)
+        if (mainTheme)
         {
-            if(!normalPlayed)
+            if(!mainPlayed)
             {
-                Play("normalTheme");
-                normalPlayed = true;
+                Play("MainTheme");
+                mainPlayed = true;
             }
 
         }
         else
         {
-            normalPlayed = false;
-            Stop("normalTheme");
+            mainPlayed = false;
+            Stop("MainTheme");
         }
 
         //---------------------------------
@@ -91,13 +90,13 @@ public class AudioManager : MonoBehaviour
         {
             if (!dangerPlayed)
             {
-                Play("dangerTheme");
+                Play("DangerTheme");
                 dangerPlayed = true;
             }
         }
         else
         {
-            Stop("dangerTheme");
+            Stop("DangerTheme");
             dangerPlayed = false;
         }
 
@@ -107,22 +106,22 @@ public class AudioManager : MonoBehaviour
             if (!zenPlayed)
             {
                 Play("DefeatEnemy");
-                Play("zenTheme");
+                Play("ZenTheme");
                 zenPlayed = true;
             }
         }
         else
         {
-            Stop("zenTheme");
+            Stop("ZenTheme");
             zenPlayed = false;
         }
 
-
+     
         //------Loops
-        // play normal theme
+        // play main theme
         if (Input.GetKeyDown("3"))
         {
-            normalTheme = true;
+            mainTheme = true;
 
             dangerTheme = false;
             zenTheme = false;
@@ -133,7 +132,7 @@ public class AudioManager : MonoBehaviour
         {
             dangerTheme = true;
 
-            normalTheme = false;
+            mainTheme = false;
             zenTheme = false;
         }
 
@@ -143,14 +142,13 @@ public class AudioManager : MonoBehaviour
             zenTheme = true;
 
             dangerTheme = false;
-            normalTheme = false;
+            mainTheme = false;
         }
 
         // stop all loops
         if (Input.GetKeyDown("6"))
         {
-
-            normalTheme = false;
+            mainTheme = false;
             dangerTheme = false;
             zenTheme = false;
         }
@@ -160,6 +158,7 @@ public class AudioManager : MonoBehaviour
 
     }
 
+    //--------------------------
     //--------------------------
     public void Play(string name)
     {

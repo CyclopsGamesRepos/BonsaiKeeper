@@ -1,17 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public class WeevilMovement : MonoBehaviour
 {
     public RootGenerator rootGenerator;
-    [SerializeField] float speed = 2.0f;
+    [SerializeField] float speed = 0.5f;
+
+    //Sound FX for eating root;
+    AudioSource audioSource;
+    [SerializeField] AudioClip audioClip;
+    bool audioPlayed;
+    float deathOffset = 0.25f;
+    float pan;
+    float pitch;
 
     /// <summary>
     /// Start is called before the first frame update
     /// </summary>
-    void Start()
+    void Start() 
     {
+        // Get audio source component and apply Sound Variables
+        audioSource = GetComponent<AudioSource>();
+        audioClip = GetComponent<AudioClip>();
+        audioPlayed = false;
+        pitch = Random.Range(0.8f, 2.4f);
 
     } // Start
 
@@ -41,9 +56,26 @@ public class WeevilMovement : MonoBehaviour
         // if we collide with a root, do attack animation and poison that root
         if (other.gameObject.CompareTag("Root") )
         {
-            RootEventHandler rootEventData = other.gameObject.GetComponent<RootEventHandler>();
-            rootGenerator.PoisonRoot(rootEventData.arrayRowPos, rootEventData.arrayColPos);
-            Destroy(gameObject);
+            //---------------
+            // Apply Sound FX
+            pan = Mathf.Clamp(transform.position.x, -1, 1);
+            audioSource.panStereo = pan;
+            audioSource.pitch = pitch;
+
+            //Play Audio
+            audioSource.Play();
+            audioPlayed = true;
+
+            //-----------------------------------------------------------------------------
+            // add delay to prevent game object being destroyed before auid has been played
+            if (audioPlayed)
+            {
+                // now destroy the game object
+                RootEventHandler rootEventData = other.gameObject.GetComponent<RootEventHandler>();
+                rootGenerator.PoisonRoot(rootEventData.arrayRowPos, rootEventData.arrayColPos);
+                Destroy(gameObject, deathOffset);
+            }
+
         }
 
     } // OnTriggerEnter

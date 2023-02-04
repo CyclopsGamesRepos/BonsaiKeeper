@@ -485,27 +485,27 @@ MonoBehaviour:
   sounds:
   - name: Atmosphere
     clip: {fileID: 8300000, guid: 80804890584d6834482477666eca072f, type: 3}
+    volume: 0.566
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
+  - name: MainTheme
+    clip: {fileID: 8300000, guid: 06c7bc1d7a3e4cd43afde84c3347b48c, type: 3}
     volume: 1
     pitch: 1
     loop: 1
     source: {fileID: 0}
-  - name: normalTheme
-    clip: {fileID: 8300000, guid: eddbf0205b978e649ab858558e4a768d, type: 3}
+  - name: DangerTheme
+    clip: {fileID: 8300000, guid: 8b58e24c887a00a48a225b3a596c8aec, type: 3}
     volume: 1
     pitch: 1
     loop: 1
     source: {fileID: 0}
-  - name: dangerTheme
-    clip: {fileID: 8300000, guid: 376c41f5527488449950202216ca0a95, type: 3}
-    volume: 0.401
-    pitch: 1
-    loop: 1
-    source: {fileID: 0}
-  - name: Grow
-    clip: {fileID: 8300000, guid: fa2753c27d0b2e54fa7a5275f58d4b19, type: 3}
+  - name: ZenTheme
+    clip: {fileID: 8300000, guid: 87e9dd683766588498d237ed76d6bdaf, type: 3}
     volume: 1
     pitch: 1
-    loop: 0
+    loop: 1
     source: {fileID: 0}
   - name: DefeatEnemy
     clip: {fileID: 8300000, guid: a8c77f3b2af2d08428208f9762e85a5c, type: 3}
@@ -513,11 +513,11 @@ MonoBehaviour:
     pitch: 1
     loop: 0
     source: {fileID: 0}
-  - name: zenTheme
-    clip: {fileID: 8300000, guid: 3ff2da9b7bf943247ad1b768bae0ded0, type: 3}
-    volume: 0.573
+  - name: Grow
+    clip: {fileID: 8300000, guid: fa2753c27d0b2e54fa7a5275f58d4b19, type: 3}
+    volume: 1
     pitch: 1
-    loop: 1
+    loop: 0
     source: {fileID: 0}
 --- !u!1 &1970248522
 GameObject:
