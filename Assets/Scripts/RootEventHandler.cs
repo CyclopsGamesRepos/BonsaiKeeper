@@ -11,7 +11,7 @@ public class RootEventHandler : MonoBehaviour
     public int arrayColPos;
 
     
-    void OnMouseOver()
+    void OnMouseDown()
     {
         // print out the position in the array so we can verify in game
         Debug.Log("root array pos is (" + arrayRowPos + ", " + arrayColPos + ")");
