@@ -133,6 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 252203138}
   - component: {fileID: 252203137}
+  - component: {fileID: 252203139}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -167,6 +168,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &252203139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 252203136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23f43ced62d265478c6150fd157f4a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rootGenerator: {fileID: 1970248523}
+  weevilPrefab: {fileID: 6755802973699408603, guid: fac7a6f7698157c44ab9ffcd750c9290, type: 3}
+  minSpawnTime: 1
+  maxSpawnTime: 3
+  numToSpawn: 1
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -439,6 +457,7 @@ MonoBehaviour:
   - {fileID: 539079951620172053, guid: c065a5d02582d38418c24c930d9a2317, type: 3}
   - {fileID: 4523787270250508678, guid: 07dde2a8e926abd488a3cd9a153b5a87, type: 3}
   - {fileID: 1702418573359334935, guid: 3f67466345dbff845807322b6c4c7b08, type: 3}
+  infectedMaterial: {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
 --- !u!4 &1970248524
 Transform:
   m_ObjectHideFlags: 0
