@@ -182,8 +182,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rootGenerator: {fileID: 1970248523}
   weevilPrefab: {fileID: 6755802973699408603, guid: fac7a6f7698157c44ab9ffcd750c9290, type: 3}
-  minSpawnTime: 1
-  maxSpawnTime: 3
+  minSpawnTime: 2
+  maxSpawnTime: 5
   numToSpawn: 1
 --- !u!1 &519420028
 GameObject:
@@ -235,7 +235,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -457,7 +457,7 @@ MonoBehaviour:
   - {fileID: 539079951620172053, guid: c065a5d02582d38418c24c930d9a2317, type: 3}
   - {fileID: 4523787270250508678, guid: 07dde2a8e926abd488a3cd9a153b5a87, type: 3}
   - {fileID: 1702418573359334935, guid: 3f67466345dbff845807322b6c4c7b08, type: 3}
-  infectedMaterial: {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+  infectedMaterial: {fileID: 2100000, guid: 9c5298ac48daf4a5cbb3a58c0c4b6ca0, type: 2}
 --- !u!4 &1970248524
 Transform:
   m_ObjectHideFlags: 0

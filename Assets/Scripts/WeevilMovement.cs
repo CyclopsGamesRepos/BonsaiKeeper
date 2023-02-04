@@ -7,13 +7,17 @@ public class WeevilMovement : MonoBehaviour
     public RootGenerator rootGenerator;
     [SerializeField] float speed = 2.0f;
 
-    // Start is called before the first frame update
+    /// <summary>
+    /// Start is called before the first frame update
+    /// </summary>
     void Start()
     {
-        
-    }
 
-    // Update is called once per frame
+    } // Start
+
+    /// <summary>
+    /// Update is called once per frame
+    /// </summary>
     void Update()
     {
         // keep moving up until we get to the top of the soil
@@ -25,9 +29,13 @@ public class WeevilMovement : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        
-    }
 
+    } // Update
+
+    /// <summary>
+    /// When the weevil collides with somthing, poison it if it is a root
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
         // if we collide with a root, do attack animation and poison that root
@@ -37,6 +45,6 @@ public class WeevilMovement : MonoBehaviour
             rootGenerator.PoisonRoot(rootEventData.arrayRowPos, rootEventData.arrayColPos);
             Destroy(gameObject);
         }
-        
-    }
+
+    } // OnTriggerEnter
 }

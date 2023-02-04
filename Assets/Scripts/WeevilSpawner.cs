@@ -14,7 +14,8 @@ public class WeevilSpawner : MonoBehaviour
     [SerializeField] float maxSpawnTime = .5f;
 
     // constant values for spawning this critter
-    private static float spawnRange = 6.0f;
+    private static float spawnOutsideRange = 5.7f;
+    private static float spawnInsideRange = 0.2f;
 
     // public variables used by this script and others
     public int numToSpawn = 1;
@@ -57,7 +58,14 @@ public class WeevilSpawner : MonoBehaviour
     /// </summary>
     private void SpawnWeevil()
     {
-        Vector3 spawnPos = new Vector3(Random.Range(-spawnRange, spawnRange), 
+        float spawnPosX = Random.Range(-spawnOutsideRange, -spawnInsideRange);
+
+        if (Random.Range(0f, 1.0f) < 0.5f)
+        {
+            spawnPosX = Random.Range(spawnOutsideRange, spawnInsideRange);
+        }
+
+        Vector3 spawnPos = new Vector3(spawnPosX, 
                                        weevilPrefab.transform.position.y,
                                        weevilPrefab.transform.position.z);
 

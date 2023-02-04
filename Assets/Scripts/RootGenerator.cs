@@ -193,25 +193,27 @@ public class RootGenerator : MonoBehaviour
     private void PruneRoot(int row, int col)
     {
         // gram the sprite and root object so we can prune it and its children
-        GameObject rootToPrune = groundSprites[row, col];
-        RootNode<RootTypes> rootNode = groundRoots[row, col];
+        GameObject rootSprite = groundSprites[row, col];
+        RootNode<RootTypes> rootNodeToPrune = groundRoots[row, col];
 
-        if (rootNode != null)
+        if (rootNodeToPrune != null)
         {
+            rootNodeToPrune.infected = false;
+
             // check child left
-            if (rootNode.Left != null)
+            if (rootNodeToPrune.Left != null)
             {
                 PruneRoot(row, col - 1);
             }
 
             // check child below
-            if (rootNode.Down != null)
+            if (rootNodeToPrune.Down != null)
             {
                 PruneRoot(row + 1, col);
             }
 
             // check child right
-            if (rootNode.Right != null)
+            if (rootNodeToPrune.Right != null)
             {
                 PruneRoot(row, col + 1);
             }
@@ -219,8 +221,8 @@ public class RootGenerator : MonoBehaviour
 
         // replace this root with soil
         groundRoots[row, col] = null;
-        groundSprites[row, col] = Instantiate(soilSprite, rootToPrune.transform.position, Quaternion.identity);
-        Destroy(rootToPrune);
+        groundSprites[row, col] = Instantiate(soilSprite, rootSprite.transform.position, Quaternion.identity);
+        Destroy(rootSprite);
 
     } // end PruneRoot
 
@@ -230,7 +232,7 @@ public class RootGenerator : MonoBehaviour
         yield return(new WaitForSeconds(timeToWait) );
 
         // if this root has not already been pruned, then infect its parent
-        if (rootInfected != null)
+        if ( (rootInfected != null) && rootInfected.infected)
         {
             if (rootInfected.Parent != null)
             {
