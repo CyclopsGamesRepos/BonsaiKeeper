@@ -264,16 +264,13 @@ public class RootGenerator : MonoBehaviour
         else if (!growLeft && ( (col == GROUND_WIDTH - 1) || (groundRoots[row, colToCheck] != null) ))
         {
             // if we are a double coming in, then does it need to change to a vertical end? Or do we need multiple doubles here?
-            if (rootToGrow.type == RootTypes.Split)
+            if (rootToGrow.type == RootTypes.SplitLeftEnd)
             {
-                if (rootToGrow.type == RootTypes.SplitLeftEnd)
-                {
-                    rootToGrow.type = RootTypes.VerticalEnd;
-                }
-                else
-                {
-                    rootToGrow.type = RootTypes.SplitRightEnd;
-                }
+                rootToGrow.type = RootTypes.VerticalEnd;
+            }
+            else if (rootToGrow.type == RootTypes.Split)
+            {
+                rootToGrow.type = RootTypes.SplitRightEnd;
             }
             else
             {
