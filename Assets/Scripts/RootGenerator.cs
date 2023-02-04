@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -60,6 +61,7 @@ public class RootGenerator : MonoBehaviour
     [Header("Ground Area Data")]
     [SerializeField] GameObject soilSprite;
     [SerializeField] GameObject[] rootSprites;
+    [SerializeField] Material infectedMaterial;
 
     // public variables used by this script and available to others
 
@@ -138,8 +140,13 @@ public class RootGenerator : MonoBehaviour
                         }
                     }
                 }
-            }
 
+                // if the root is infected, change it to show it is infected
+                if ( (groundRoots[row, col] != null) && (groundRoots[row, col].infected) )
+                {
+                    groundSprites[row, col].GetComponent<SpriteRenderer>().material = infectedMaterial;
+                }
+            }
         }
         
     } // end Update
@@ -160,6 +167,29 @@ public class RootGenerator : MonoBehaviour
 
     } // end DoPrune
 
+    /// <summary>
+    /// Poisons the root at the given location and prepares it to poison it's parent
+    /// </summary>
+    /// <param name="row"></param>
+    /// <param name="col"></param>
+    public void PoisonRoot(int row, int col)
+    {
+        groundRoots[row, col].infected = true;
+
+        // mark it as grown as an infected root should not grow further
+        groundRoots[row, col].grown = true;
+
+        // set up a timer to continue the infection
+        //groundRoots[row, col].Parent.timeToGrow = Random.Range(MIN_TIME, MAX_TIME);
+        StartCoroutine(PoisonParent(groundRoots[row, col], Random.Range(MIN_TIME, MAX_TIME) ) );
+
+    } // end PoisonRoot
+
+    /// <summary>
+    /// Prunes the given root and its children
+    /// </summary>
+    /// <param name="row">the row where the root lies in the array</param>
+    /// <param name="col">the col where the root lies in the array</param>
     private void PruneRoot(int row, int col)
     {
         // gram the sprite and root object so we can prune it and its children
@@ -193,6 +223,23 @@ public class RootGenerator : MonoBehaviour
         Destroy(rootToPrune);
 
     } // end PruneRoot
+
+    IEnumerator PoisonParent(RootNode<RootTypes> rootInfected, float timeToWait)
+    {
+        // wait a bit then infect the parent
+        yield return(new WaitForSeconds(timeToWait) );
+
+        // if this root has not already been pruned, then infect its parent
+        if (rootInfected != null)
+        {
+            if (rootInfected.Parent != null)
+            {
+                rootInfected.Parent.infected = true;
+                StartCoroutine(PoisonParent(rootInfected.Parent, Random.Range(MIN_TIME, MAX_TIME ) ) );
+            }
+        }
+
+    } // end PoisonParent
 
     /// <summary>
     /// grows the current root horizontally based on the grow criteria
