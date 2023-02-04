@@ -1,18 +1,118 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public enum TreeState
     {
-        
+        ROOT,           // 0
+        SEEDLING,       // 1
+        SAPLING,        // 2    
+        SMALL_TREE,     // 3
+        MEDIUM_TREE,    // 4
+        OPTIMAL_TREE,   // 5
+        LARGE_TREE,     // 6
+        OVERGROWN,      // 7
+        TOO_BIG,        // 8
     }
 
-    // Update is called once per frame
+    // constant values for the game manager
+    private static float START_WATER_LEVEL = 0.5f;
+    private static float START_SUN_LEVEL = 0.5f;
+    private static float SUN_DECREASE_MULT = 0.2f;
+
+    // public variables used by other scripts
+    public bool gameRunning;
+    public bool gamePaused;
+
+    // private variables used by this script
+    private TreeState treeState;
+    private float waterLevel;
+    private float sunLevel;
+    private float score;
+
+    /// <summary>
+    /// Start is called before the first frame update - basic setup
+    /// </summary>
+    void Start()
+    {
+        treeState = TreeState.ROOT;
+        waterLevel = START_WATER_LEVEL;
+        sunLevel = START_SUN_LEVEL;
+        score = 0;
+        gameRunning = false;
+        gamePaused = false;
+
+    } // end Start
+
+    /// <summary>
+    /// Update is called once per frame
+    /// </summary>
     void Update()
     {
-        
-    }
+        // only update the game systems if we are running and the pause button hasn't been pressed
+        if (gameRunning && !gamePaused) 
+        { 
+            // decrease water based on Sun (and number of roots?)
+            waterLevel -= (sunLevel * Time.deltaTime * SUN_DECREASE_MULT);
+
+            if (waterLevel < 0)
+            {
+                waterLevel = 0;
+            }
+
+            // update water level sprite variable
+
+            // TODO: Change root growth based on water levels? sun levels?
+
+            // Change Tree state
+            UpdateTreeState();
+
+            // update the score based on time and level of tree (optimal is best)
+            score += Time.deltaTime * ((int)TreeState.OPTIMAL_TREE - Mathf.Abs((int)TreeState.OPTIMAL_TREE - (int)treeState) );
+
+            // TODO: Add sun changes (cycle?)
+        }
+
+    } // Update
+
+    /// <summary>
+    /// Starts the game for real from menu
+    /// </summary>
+    public void StartGame()
+    {
+        gameRunning = true;
+
+    } // StartGame
+
+    /// <summary>
+    /// Restarts the game by reloading the scene
+    /// </summary>
+    public void ReStartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+    } // ReStartGame
+
+    /// <summary>
+    /// Pauses/unpauses the game
+    /// </summary>
+    public void TogglePauseGame()
+    {
+        gamePaused = !gamePaused;
+
+    } // end TogglePauseGame
+
+    /// <summary>
+    /// updates the current tree state based on the variables roots, water and sun
+    /// </summary>
+    private void UpdateTreeState()
+    {
+        // based on how many roots there are, water level and sun levels
+
+    } // end UpdateTreeState
+
 }
