@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2774016396507979648}
   - component: {fileID: 6538009927350720265}
+  - component: {fileID: -116389538164148825}
+  - component: {fileID: -2545990338882493710}
   m_Layer: 0
   m_Name: 1_RootDouble
   m_TagString: Untagged
@@ -84,3 +86,31 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &-116389538164148825
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7306172306101761619}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abbe7b4045ff157409d61294f37a5040, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rootGenerator: {fileID: 0}
+  arrayRowPos: 0
+  arrayColPos: 0
+--- !u!65 &-2545990338882493710
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7306172306101761619}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.32, y: 0.32, z: 0.2}
+  m_Center: {x: 0, y: 0, z: 0}

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using static UnityEngine.Rendering.DebugUI.Table;
 
 public class RootGenerator : MonoBehaviour
@@ -42,7 +43,7 @@ public class RootGenerator : MonoBehaviour
     // constant values for creating roots
     private static float MIN_TIME = 0.5f;
     private static float MAX_TIME = 2.5f;
-    private static float ROOT_CHANCE = 0.5f;
+    private static float ROOT_CHANCE = 0.3f;
     private static int ROOT_START_COL = 17;
 
     // constant values for setting up the ground sprites
@@ -141,6 +142,23 @@ public class RootGenerator : MonoBehaviour
     } // end Update
 
     /// <summary>
+    /// Prunes the roots at the given location in the ground array
+    /// </summary>
+    /// <param name="row"></param>
+    /// <param name="col"></param>
+    public void DoPrune(int row, int col)
+    {
+        // set parent node to growable again
+        groundRoots[row, col].Parent.grown = false;
+        groundRoots[row, col].Parent.timeToGrow = Random.Range(MIN_TIME, MAX_TIME);
+
+        // cut this node and all following nodes (replacing them with the ground soil sprite)
+        groundSprites[row, col] = Instantiate(soilSprite, groundSprites[row, col].transform.position, Quaternion.identity);
+
+
+    } // end DoPrune
+
+    /// <summary>
     /// grows the current root horizontally based on the grow criteria
     /// </summary>
     /// <param name="rootToGrow">the current root node to be grown</param>
@@ -228,8 +246,17 @@ public class RootGenerator : MonoBehaviour
             newRoot.timeToGrow = growTimer;
 
             newRoot.Parent = rootToGrow;
-            rootToGrow.Down = newRoot;
             groundRoots[row, colToCheck] = newRoot;
+
+            // set up the root paths for pruning and infecting
+            if (growLeft)
+            {
+                rootToGrow.Left = newRoot;
+            }
+            else
+            {
+                rootToGrow.Right = newRoot;
+            }
 
             // make sure to update the graphics
             ChangeRootSprite((int)newRoot.type, row, colToCheck);
@@ -321,8 +348,8 @@ public class RootGenerator : MonoBehaviour
         {
             for (int col = 0; col < GROUND_WIDTH; col++)
             {
-                Vector3 screenPosition = new Vector3( (screenStartPosition.x + col * GROUND_SPRITE_SIZE),
-                                                      (screenStartPosition.y - row * GROUND_SPRITE_SIZE),
+                Vector3 screenPosition = new Vector3( (screenStartPosition.x + (col * GROUND_SPRITE_SIZE) ),
+                                                      (screenStartPosition.y - (row * GROUND_SPRITE_SIZE) ),
                                                        screenStartPosition.z);
 
                 Vector3 spritePos = cam.ScreenToWorldPoint(screenPosition);
@@ -344,15 +371,37 @@ public class RootGenerator : MonoBehaviour
         GameObject oldGroundSprite = groundSprites[row, col];
         GameObject newGroundSprite = soilSprite;
 
+        bool isRoot = (rootToChange >= 0) && (rootToChange < rootSprites.Length);
         // if the value of the root change is not in range, we must leave it as groundSoil
-        if ( (rootToChange >= 0) && (rootToChange < rootSprites.Length) )
+        if (isRoot)
         {
             newGroundSprite = rootSprites[rootToChange];
         }
 
         groundSprites[row, col] = Instantiate(newGroundSprite, oldGroundSprite.transform.position, Quaternion.identity);
+        
+        // if it is a root - there is some additional setup for the click events
+        if (isRoot)
+        {
+            groundSprites[row, col].GetComponent<RootEventHandler>().rootGenerator = this;
+            groundSprites[row, col].GetComponent<RootEventHandler>().arrayRowPos = row;
+            groundSprites[row, col].GetComponent<RootEventHandler>().arrayColPos = col;
+
+
+            //StartCoroutine(Coroutine_Refresh(groundSprites[row, col]));
+        }
+
+        // clean up the old sprite
         Destroy(oldGroundSprite, .05f);
 
     } // end ChangeRootSprite
+
+    /*IEnumerator Coroutine_Refresh(GameObject obj)
+    {
+        BoxCollider2D box = obj.GetComponent<BoxCollider2D>();
+        box.enabled = false;
+        yield return new WaitForSeconds(1f);
+        box.enabled = true;
+    }*/
 
 }
