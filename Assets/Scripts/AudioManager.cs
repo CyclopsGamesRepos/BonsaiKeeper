@@ -106,6 +106,7 @@ public class AudioManager : MonoBehaviour
         {
             if (!zenPlayed)
             {
+                Play("DefeatEnemy");
                 Play("zenTheme");
                 zenPlayed = true;
             }
@@ -143,6 +144,15 @@ public class AudioManager : MonoBehaviour
 
             dangerTheme = false;
             normalTheme = false;
+        }
+
+        // stop all loops
+        if (Input.GetKeyDown("6"))
+        {
+
+            normalTheme = false;
+            dangerTheme = false;
+            zenTheme = false;
         }
 
 

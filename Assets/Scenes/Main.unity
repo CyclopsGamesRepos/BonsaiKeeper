@@ -152,7 +152,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d0ac1f9748387b41ba4625ebd51d0b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioManager: {fileID: 1906363954}
 --- !u!4 &252203138
 Transform:
   m_ObjectHideFlags: 0
@@ -479,8 +478,8 @@ MonoBehaviour:
     loop: 1
     source: {fileID: 0}
   - name: dangerTheme
-    clip: {fileID: 8300000, guid: 2573949541b51264ebb7e39f2d62f757, type: 3}
-    volume: 1
+    clip: {fileID: 8300000, guid: 376c41f5527488449950202216ca0a95, type: 3}
+    volume: 0.401
     pitch: 1
     loop: 1
     source: {fileID: 0}
@@ -492,13 +491,13 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: DefeatEnemy
     clip: {fileID: 8300000, guid: a8c77f3b2af2d08428208f9762e85a5c, type: 3}
-    volume: 1
+    volume: 0.518
     pitch: 1
     loop: 0
     source: {fileID: 0}
   - name: zenTheme
     clip: {fileID: 8300000, guid: 3ff2da9b7bf943247ad1b768bae0ded0, type: 3}
-    volume: 1
+    volume: 0.573
     pitch: 1
     loop: 1
     source: {fileID: 0}
