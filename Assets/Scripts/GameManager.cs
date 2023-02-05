@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms.Impl;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -30,6 +32,11 @@ public class GameManager : MonoBehaviour
     // serialized variables for use in this script
     [Header("Data for animations")]
     [SerializeField] Animator treeAnim;
+    [SerializeField] Slider waterAnim;
+    [SerializeField] Slider sunAnim;
+    [SerializeField] TMP_Text pauseScoreText;
+    [SerializeField] TMP_Text gameOverScoreText;
+    [SerializeField] TMP_Text highScoreText;
 
     [Header("UI Elements for updating")]
     [SerializeField] GameObject pauseScreen;
@@ -78,6 +85,7 @@ public class GameManager : MonoBehaviour
             }
 
             // update water level sprite variable
+            waterAnim.value= waterLevel;
 
             // TODO: Change root growth based on water levels? sun levels?
 
