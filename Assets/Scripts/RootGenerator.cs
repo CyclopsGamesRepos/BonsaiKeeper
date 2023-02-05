@@ -44,17 +44,13 @@ public class RootGenerator : MonoBehaviour
     }
 
     // constant values for creating roots
-    private static float MIN_TIME = 0.5f;
-    private static float MAX_TIME = 2.5f;
     private static float HORIZONTAL_CHANCE = 0.65f;
-    private static int ROOT_START_COL = 17;
+    private static int ROOT_START_COL = 18;
 
     // constant values for setting up the ground sprites
     private static int GROUND_START_PIXEL_X = 208;
     private static int GROUND_START_PIXEL_Y = 360;
     private static int GROUND_Z_OFFSET = 5;
-    private static int GROUND_WIDTH = 36;
-    private static int GROUND_HEIGHT = 15;
     private static int GROUND_SPRITE_SIZE = 24;          // ground sprites size in pixels (24x24)
 
     // serialized variables for this script
@@ -64,8 +60,13 @@ public class RootGenerator : MonoBehaviour
     [SerializeField] Material infectedMaterial;
 
     // public variables used by this script and available to others
+    public static int GROUND_WIDTH = 36;
+    public static int GROUND_HEIGHT = 15;
+    public float minSpawnTime = 0.5f;
+    public float maxSpawnTime = 2.5f;
 
     // private variables used by this script only
+    GameManager gameManager;
     private RootNode<RootTypes>[,] groundRoots;
     private GameObject[,] groundSprites;
 
@@ -83,12 +84,15 @@ public class RootGenerator : MonoBehaviour
         beginningRoot.type = RootTypes.Vertical;
 
         // randomize the timer so starts to grow at different rates
-        beginningRoot.timeToGrow = Random.Range(MIN_TIME, MAX_TIME);
+        beginningRoot.timeToGrow = Random.Range(minSpawnTime, maxSpawnTime);
 
         groundRoots[0, ROOT_START_COL] = beginningRoot;
 
         // set up the root sprite at that location
         ChangeRootSprite((int)beginningRoot.type, 0, ROOT_START_COL);
+
+        // get access to the game manager so we can pause
+        gameManager = GameObject.FindObjectOfType<GameManager>().GetComponent<GameManager>();
 
     } // end Start
 
@@ -97,54 +101,58 @@ public class RootGenerator : MonoBehaviour
     /// </summary>
     void Update()
     {
-        // get the change in time so we don't have to do it for all the roots
-        float timeDelta = Time.deltaTime;
-
-        // go through the list of roots to grow and see if it is time to grow them
-        for (int row = 0; row < GROUND_HEIGHT; row++)
+        if (gameManager.gameRunning && !gameManager.gamePaused)
         {
-            for (int col = 0; col < GROUND_WIDTH; col++) {
+            // get the change in time so we don't have to do it for all the roots
+            float timeDelta = Time.deltaTime;
 
-                if ( (groundRoots[row, col] != null) && !groundRoots[row, col].grown)
+            // go through the list of roots to grow and see if it is time to grow them
+            for (int row = 0; row < GROUND_HEIGHT; row++)
+            {
+                for (int col = 0; col < GROUND_WIDTH; col++)
                 {
-                    groundRoots[row, col].timeToGrow -= timeDelta;
 
-                    if (groundRoots[row, col].timeToGrow <= 0)
+                    if ((groundRoots[row, col] != null) && !groundRoots[row, col].grown)
                     {
-                        switch (groundRoots[row, col].type)
+                        groundRoots[row, col].timeToGrow -= timeDelta;
+
+                        if (groundRoots[row, col].timeToGrow <= 0)
                         {
-                            // can transition to Vertical, Split or VerticalEnd
-                            case RootTypes.Vertical:
-                            case RootTypes.ElbowLeft:
-                            case RootTypes.ElbowRight:
-                                GrowVerticalRoot(groundRoots[row, col], row, col);
-                                break;
+                            switch (groundRoots[row, col].type)
+                            {
+                                // can transition to Vertical, Split or VerticalEnd
+                                case RootTypes.Vertical:
+                                case RootTypes.ElbowLeft:
+                                case RootTypes.ElbowRight:
+                                    GrowVerticalRoot(groundRoots[row, col], row, col);
+                                    break;
 
-                            // can transition to Horizontal, Elbow, LeftEnd or RightEnd
-                            case RootTypes.Split:
-                                GrowHorizontalRoot(groundRoots[row, col], row, col, true);
-                                GrowHorizontalRoot(groundRoots[row, col], row, col, false);
-                                break;
+                                // can transition to Horizontal, Elbow, LeftEnd or RightEnd
+                                case RootTypes.Split:
+                                    GrowHorizontalRoot(groundRoots[row, col], row, col, true);
+                                    GrowHorizontalRoot(groundRoots[row, col], row, col, false);
+                                    break;
 
-                            case RootTypes.HorizontalLeft:
-                                GrowHorizontalRoot(groundRoots[row, col], row, col, true);
-                                break;
+                                case RootTypes.HorizontalLeft:
+                                    GrowHorizontalRoot(groundRoots[row, col], row, col, true);
+                                    break;
 
-                            case RootTypes.HorizontalRight:
-                                GrowHorizontalRoot(groundRoots[row, col], row, col, false);
-                                break;
+                                case RootTypes.HorizontalRight:
+                                    GrowHorizontalRoot(groundRoots[row, col], row, col, false);
+                                    break;
 
-                            // these should not grow!
-                            default:
-                                break;
+                                // these should not grow!
+                                default:
+                                    break;
+                            }
                         }
                     }
-                }
 
-                // if the root is infected, change it to show it is infected
-                if ( (groundRoots[row, col] != null) && (groundRoots[row, col].infected) )
-                {
-                    groundSprites[row, col].GetComponent<SpriteRenderer>().material = infectedMaterial;
+                    // if the root is infected, change it to show it is infected
+                    if ((groundRoots[row, col] != null) && (groundRoots[row, col].infected))
+                    {
+                        groundSprites[row, col].GetComponent<SpriteRenderer>().material = infectedMaterial;
+                    }
                 }
             }
         }
@@ -160,7 +168,7 @@ public class RootGenerator : MonoBehaviour
     {
         // set parent node to growable again
         groundRoots[row, col].Parent.grown = false;
-        groundRoots[row, col].Parent.timeToGrow = Random.Range(MIN_TIME, MAX_TIME);
+        groundRoots[row, col].Parent.timeToGrow = Random.Range(minSpawnTime, maxSpawnTime);
 
         // cut this node and all following nodes (replacing them with the ground soil sprite)
         PruneRoot(row, col);
@@ -180,8 +188,8 @@ public class RootGenerator : MonoBehaviour
         groundRoots[row, col].grown = true;
 
         // set up a timer to continue the infection
-        //groundRoots[row, col].Parent.timeToGrow = Random.Range(MIN_TIME, MAX_TIME);
-        StartCoroutine(PoisonParent(groundRoots[row, col], Random.Range(MIN_TIME, MAX_TIME) ) );
+        //groundRoots[row, col].Parent.timeToGrow = Random.Range(minSpawnTime, maxSpawnTime);
+        StartCoroutine(PoisonParent(groundRoots[row, col], Random.Range(minSpawnTime, maxSpawnTime) ) );
 
     } // end PoisonRoot
 
@@ -223,6 +231,7 @@ public class RootGenerator : MonoBehaviour
         groundRoots[row, col] = null;
         groundSprites[row, col] = Instantiate(soilSprite, rootSprite.transform.position, Quaternion.identity);
         Destroy(rootSprite);
+        gameManager.currentNumRoots--;
 
     } // end PruneRoot
 
@@ -237,7 +246,7 @@ public class RootGenerator : MonoBehaviour
             if (rootInfected.Parent != null)
             {
                 rootInfected.Parent.infected = true;
-                StartCoroutine(PoisonParent(rootInfected.Parent, Random.Range(MIN_TIME, MAX_TIME ) ) );
+                StartCoroutine(PoisonParent(rootInfected.Parent, Random.Range(minSpawnTime, maxSpawnTime ) ) );
             }
         }
 
@@ -255,7 +264,7 @@ public class RootGenerator : MonoBehaviour
         rootToGrow.grown = true;
 
         // grab a random time in case we need to make the root grow
-        float growTimer = Random.Range(MIN_TIME, MAX_TIME);
+        float growTimer = Random.Range(minSpawnTime, maxSpawnTime);
 
         RootNode<RootTypes> newRoot = new RootNode<RootTypes>();
 
@@ -338,6 +347,7 @@ public class RootGenerator : MonoBehaviour
 
             newRoot.Parent = rootToGrow;
             groundRoots[row, colToCheck] = newRoot;
+            gameManager.currentNumRoots++;
 
             // set up the root paths for pruning and infecting
             if (growLeft)
@@ -367,7 +377,7 @@ public class RootGenerator : MonoBehaviour
         rootToGrow.grown = true;
 
         // grab a random time in case we need to make the root grow
-        float growTimer = Random.Range(MIN_TIME, MAX_TIME);
+        float growTimer = Random.Range(minSpawnTime, maxSpawnTime);
 
         RootNode<RootTypes> newRoot = new RootNode<RootTypes>();
 
@@ -410,6 +420,7 @@ public class RootGenerator : MonoBehaviour
             newRoot.Parent = rootToGrow;
             rootToGrow.Down = newRoot;
             groundRoots[row + 1, col] = newRoot;
+            gameManager.currentNumRoots++;
 
             // make sure to update the graphics
             ChangeRootSprite((int)newRoot.type, row + 1, col);
@@ -477,6 +488,11 @@ public class RootGenerator : MonoBehaviour
             groundSprites[row, col].GetComponent<RootEventHandler>().arrayRowPos = row;
             groundSprites[row, col].GetComponent<RootEventHandler>().arrayColPos = col;
 
+            // if it is the main root, set that up
+            if ( (row== 0) && (col == ROOT_START_COL) )
+            {
+                groundSprites[row, col].GetComponent<RootEventHandler>().isMainRoot = true;
+            }
 
             //StartCoroutine(Coroutine_Refresh(groundSprites[row, col]));
         }

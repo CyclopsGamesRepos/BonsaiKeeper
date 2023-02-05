@@ -17,6 +17,9 @@ public class WeevilMovement : MonoBehaviour
     float pan;
     float pitch;
 
+    // private variables for this script
+    GameManager gameManager;
+
     /// <summary>
     /// Start is called before the first frame update
     /// </summary>
@@ -28,6 +31,9 @@ public class WeevilMovement : MonoBehaviour
         audioPlayed = false;
         pitch = Random.Range(0.8f, 1.1f);
 
+        // get access to the game manager so we can pause
+        gameManager = GameObject.FindObjectOfType<GameManager>().GetComponent<GameManager>();
+
     } // Start
 
     /// <summary>
@@ -36,13 +42,16 @@ public class WeevilMovement : MonoBehaviour
     void Update()
     {
         // keep moving up until we get to the top of the soil
-        if (transform.position.y < 0)
+        if (gameManager.gameRunning && !gameManager.gamePaused)
         {
-            transform.Translate(Vector2.up * speed * Time.deltaTime);
-        }
-        else
-        {
-            Destroy(gameObject);
+            if (transform.position.y < 0)
+            {
+                transform.Translate(Vector2.up * speed * Time.deltaTime);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
 
     } // Update

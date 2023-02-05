@@ -20,13 +20,19 @@ public class GameManager : MonoBehaviour
     }
 
     // constant values for the game manager
+    private static int[] GROWTH_ROOT_VALUES = { 8, 13, 21, 34, 55, 89, 144, 233, 377 };
     private static float START_WATER_LEVEL = 0.5f;
     private static float START_SUN_LEVEL = 0.5f;
     private static float SUN_DECREASE_MULT = 0.2f;
 
+    // serialized variables for use in this script
+    [Header("Data for animations")]
+    [SerializeField] Animator treeAnim;
+
     // public variables used by other scripts
     public bool gameRunning;
     public bool gamePaused;
+    public int currentNumRoots;
 
     // private variables used by this script
     private TreeState treeState;
@@ -42,6 +48,7 @@ public class GameManager : MonoBehaviour
         treeState = TreeState.ROOT;
         waterLevel = START_WATER_LEVEL;
         sunLevel = START_SUN_LEVEL;
+        currentNumRoots = 0;
         score = 0;
         gameRunning = false;
         gamePaused = false;
@@ -112,6 +119,19 @@ public class GameManager : MonoBehaviour
     private void UpdateTreeState()
     {
         // based on how many roots there are, water level and sun levels
+        // for now to get it working base it loosely on num roots (may keep this)
+        // using fionacci sequence for now (reverse really)
+        if ( (treeState != TreeState.ROOT) && (currentNumRoots < GROWTH_ROOT_VALUES[(int)treeState]) )
+        {
+            treeState--;
+        }
+        else if ( (treeState != TreeState.TOO_BIG) && (currentNumRoots > GROWTH_ROOT_VALUES[(int)treeState + 1]) )
+        {
+            treeState++;
+        }
+
+        // set the animation state for the tree
+        treeAnim.SetInteger("tree state", (int)treeState);
 
     } // end UpdateTreeState
 

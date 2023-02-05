@@ -21,6 +21,7 @@ public class WeevilSpawner : MonoBehaviour
     public int numToSpawn = 1;
 
     // private variables used by this script
+    GameManager gameManager;
     private float spawnTimer;
 
     /// <summary>
@@ -30,24 +31,31 @@ public class WeevilSpawner : MonoBehaviour
     {
         // set up the spawn timer
         spawnTimer = Random.Range(minSpawnTime, maxSpawnTime);
-    }
+
+        // get access to the game manager so we can pause
+        gameManager = GameObject.FindObjectOfType<GameManager>().GetComponent<GameManager>();
+
+    } // end Start
 
     /// <summary>
     /// Update is called once per frame
     /// </summary>
     void Update()
     {
-        spawnTimer -= Time.deltaTime;
-
-        if (spawnTimer <= 0)
+        if (gameManager.gameRunning && !gameManager.gamePaused)
         {
-            // reset the spawn timer
-            spawnTimer = Random.Range(minSpawnTime, maxSpawnTime);
+            spawnTimer -= Time.deltaTime;
 
-            // spawn the number of weevils that is currently set up
-            for (int numWeevils = 0; numWeevils < numToSpawn; numWeevils++)
+            if (spawnTimer <= 0)
             {
-                SpawnWeevil();
+                // reset the spawn timer
+                spawnTimer = Random.Range(minSpawnTime, maxSpawnTime);
+
+                // spawn the number of weevils that is currently set up
+                for (int numWeevils = 0; numWeevils < numToSpawn; numWeevils++)
+                {
+                    SpawnWeevil();
+                }
             }
         }
         
@@ -71,5 +79,6 @@ public class WeevilSpawner : MonoBehaviour
 
         GameObject spawnedWeevil = Instantiate(weevilPrefab, spawnPos, Quaternion.identity);
         spawnedWeevil.GetComponent<WeevilMovement>().rootGenerator = rootGenerator;
-    }
+
+    } // end SpawnWeevil
 }
