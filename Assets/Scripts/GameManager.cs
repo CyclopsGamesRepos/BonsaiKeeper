@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour
     public int currentNumRoots;
 
     // private variables used by this script
-    private TreeState treeState;
+    public TreeState treeState;
     private float waterLevel;
     private float sunLevel;
     private float score;

@@ -70,6 +70,14 @@ public class RootGenerator : MonoBehaviour
     private RootNode<RootTypes>[,] groundRoots;
     private GameObject[,] groundSprites;
 
+
+
+    [Header("Audio")]
+    [SerializeField] AudioClip audioClip;
+    AudioSource audioSource;
+
+
+
     /// <summary>
     /// Start is called before the first frame update to set up the root system to grow
     /// </summary>
@@ -93,6 +101,11 @@ public class RootGenerator : MonoBehaviour
 
         // get access to the game manager so we can pause
         gameManager = GameObject.FindObjectOfType<GameManager>().GetComponent<GameManager>();
+
+        // Get audio source component and apply Sound Variables
+        audioSource = GetComponent<AudioSource>();
+        audioClip = GetComponent<AudioClip>();
+    
 
     } // end Start
 
@@ -200,6 +213,14 @@ public class RootGenerator : MonoBehaviour
     /// <param name="col">the col where the root lies in the array</param>
     private void PruneRoot(int row, int col)
     {
+
+        //Play Audio
+        audioSource.Play();
+
+        
+
+
+
         // gram the sprite and root object so we can prune it and its children
         GameObject rootSprite = groundSprites[row, col];
         RootNode<RootTypes> rootNodeToPrune = groundRoots[row, col];
