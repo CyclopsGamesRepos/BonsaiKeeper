@@ -4,14 +4,35 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Diagnostics;
+using System.ComponentModel.Design.Serialization;
 
 public class AudioManager : MonoBehaviour
 {
     public Sound[] sounds;
-
     public static AudioManager instance;
-    bool mainTheme, dangerTheme, zenTheme;
-    bool mainPlayed, dangerPlayed, zenPlayed;
+    bool mainTheme, dangerTheme, zenTheme, largeTheme;
+    bool mainPlayed, dangerPlayed, zenPlayed, largePlayed;
+
+    //---------------
+    [Header("Reference")]
+    [SerializeField] GameObject gameManager;
+    GameManager gameManagerScript;
+    string currentState;
+
+
+    //public enum TreeState
+    //{
+    //    ROOT,           // 0
+    //    SEEDLING,       // 1
+    //    SAPLING,        // 2    
+    //    SMALL_TREE,     // 3
+    //    MEDIUM_TREE,    // 4
+    //    OPTIMAL_TREE,   // 5
+    //    LARGE_TREE,     // 6
+    //    OVERGROWN,      // 7
+    //    TOO_BIG,        // 8
+    //}
+
 
     // instructions:
     // key 1 - 2 audio hits
@@ -43,115 +64,117 @@ public class AudioManager : MonoBehaviour
             s.source.volume = s.volume;
             s.source.pitch = s.pitch;
             s.source.loop = s.loop;
+
         }
     }
 
     //---------
     void Start()
     {
+        gameManagerScript = gameManager.GetComponent<GameManager>();
+        currentState = gameManagerScript.treeState.ToString();
+
+
         Play("Atmosphere");
     }
 
     //----------
     void Update()
     {
+        currentState = gameManagerScript.treeState.ToString();
+
+
         //-------------------------
-        // grow sound hit
-        if (Input.GetKeyDown("1"))
+        //-------------------------
+        // Play Root State Theme
+        if (currentState == "ROOT"
+            || currentState == "SEEDLING")
         {
-            Play("Grow");
+            if (!dangerPlayed)
+            {
+                Play("DangerTheme");
+                Play("DangerHit");
+                dangerPlayed = true;
+            }
         }
 
-        // defeat enemy hit
-        if (Input.GetKeyDown("2"))
+        if (currentState != "ROOT" && currentState != "SEEDLING")
         {
-            Play("DefeatEnemy");
+            dangerPlayed = false;
+            Stop("DangerTheme");
         }
 
 
-        //---------------------------------
-        if (mainTheme)
+
+        //-------------------------
+        //-------------------------
+        // Play Main State Theme
+        if (currentState == "SAPLING"
+            || currentState == "SMALL_TREE"
+            || currentState == "MEDIUM_TREE")
         {
-            if(!mainPlayed)
+            if (!mainPlayed)
             {
                 Play("MainTheme");
+                Play("MainHit");
                 mainPlayed = true;
             }
-
         }
-        else
+
+        if (currentState != "SAPLING"
+            && currentState != "SMALL_TREE"
+            && currentState != "MEDIUM_TREE")
         {
             mainPlayed = false;
             Stop("MainTheme");
         }
 
-        //---------------------------------
-        if (dangerTheme)
-        {
-            if (!dangerPlayed)
-            {
-                Play("DangerTheme");
-                dangerPlayed = true;
-            }
-        }
-        else
-        {
-            Stop("DangerTheme");
-            dangerPlayed = false;
-        }
 
-        //---------------------------------
-        if (zenTheme)
+        //-------------------------
+        //-------------------------
+        // Play Zen State Theme
+        if (currentState == "OPTIMAL_TREE"
+            || currentState == "LARGE_TREE")
         {
             if (!zenPlayed)
             {
-                Play("DefeatEnemy");
                 Play("ZenTheme");
+                Play("ZenHit");
                 zenPlayed = true;
             }
         }
-        else
+
+        if (currentState != "OPTIMAL_TREE"
+            && currentState != "LARGE_TREE")
         {
-            Stop("ZenTheme");
             zenPlayed = false;
+            Stop("ZenTheme");
         }
 
-     
-        //------Loops
-        // play main theme
-        if (Input.GetKeyDown("3"))
+
+        //-------------------------
+        //-------------------------
+        // Play large State Theme
+        if (currentState == "OVERGROWN"
+            || currentState == "TOO_BIG")
         {
-            mainTheme = true;
-
-            dangerTheme = false;
-            zenTheme = false;
+            if (!largePlayed)
+            {
+                Play("DangerHit");
+                Play("LargeTheme");
+                largePlayed = true;
+            }
         }
 
-        // play danger theme
-        if (Input.GetKeyDown("4"))
+        if (currentState != "OVERGROWN"
+            && currentState != "TOO_BIG")
         {
-            dangerTheme = true;
-
-            mainTheme = false;
-            zenTheme = false;
+            largePlayed = false;
+            Stop("LargeTheme");
         }
 
-        // play zen theme
-        if (Input.GetKeyDown("5"))
-        {
-            zenTheme = true;
 
-            dangerTheme = false;
-            mainTheme = false;
-        }
 
-        // stop all loops
-        if (Input.GetKeyDown("6"))
-        {
-            mainTheme = false;
-            dangerTheme = false;
-            zenTheme = false;
-        }
 
 
 
