@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
     private static int[] GROWTH_ROOT_VALUES = { 8, 13, 21, 34, 55, 89, 144, 233, 377 };
     private static float START_WATER_LEVEL = 0.5f;
     private static float START_SUN_LEVEL = 0.5f;
-    private static float SUN_DECREASE_MULT = 0.2f;
+    private static float SUN_DECREASE_MULT = 0.05f;
 
     private static float GAME_OVER_DELAY = 2.0f;
 
