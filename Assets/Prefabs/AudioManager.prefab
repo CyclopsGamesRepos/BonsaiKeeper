@@ -57,23 +57,17 @@ MonoBehaviour:
     pitch: 1
     loop: 1
     source: {fileID: 0}
-  - name: MainTheme
-    clip: {fileID: 8300000, guid: 06c7bc1d7a3e4cd43afde84c3347b48c, type: 3}
-    volume: 1
-    pitch: 1
-    loop: 1
-    source: {fileID: 0}
-  - name: ZenTheme
-    clip: {fileID: 8300000, guid: 87e9dd683766588498d237ed76d6bdaf, type: 3}
-    volume: 0.616
-    pitch: 1
-    loop: 1
-    source: {fileID: 0}
   - name: DangerHit
     clip: {fileID: 8300000, guid: 9d14ab350e7d77942bdd0895ba899303, type: 3}
     volume: 1
     pitch: 1
     loop: 0
+    source: {fileID: 0}
+  - name: MainTheme
+    clip: {fileID: 8300000, guid: 06c7bc1d7a3e4cd43afde84c3347b48c, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 1
     source: {fileID: 0}
   - name: MainHit
     clip: {fileID: 8300000, guid: ae047c30449c3c94cbcb9d03d3fe6378, type: 3}
@@ -81,10 +75,22 @@ MonoBehaviour:
     pitch: 1
     loop: 0
     source: {fileID: 0}
+  - name: ZenTheme
+    clip: {fileID: 8300000, guid: 87e9dd683766588498d237ed76d6bdaf, type: 3}
+    volume: 0.616
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
   - name: ZenHit
     clip: {fileID: 8300000, guid: bea0402d3c3c2ff409e1d250eefec1b4, type: 3}
     volume: 0.735
     pitch: 1
     loop: 0
+    source: {fileID: 0}
+  - name: LargeTheme
+    clip: {fileID: 8300000, guid: 1c8736d80105f7b4299bbf906939be83, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 1
     source: {fileID: 0}
   gameManager: {fileID: 0}
