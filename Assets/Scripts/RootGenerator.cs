@@ -40,6 +40,7 @@ public class RootGenerator : MonoBehaviour
         public float timeToGrow;
         public bool grown;
         public bool infected;
+        public bool mainRoot;
         public T type;
     }
 
@@ -61,9 +62,11 @@ public class RootGenerator : MonoBehaviour
 
     // public variables used by this script and available to others
     public static int GROUND_WIDTH = 36;
-    public static int GROUND_HEIGHT = 15;
+    public static int GROUND_HEIGHT = 14;
     public float minSpawnTime = 0.5f;
     public float maxSpawnTime = 2.5f;
+    public float minInfectTime = 0.5f;
+    public float maxInfectTime = 2.5f;
 
     // private variables used by this script only
     GameManager gameManager;
@@ -85,6 +88,7 @@ public class RootGenerator : MonoBehaviour
 
         // randomize the timer so starts to grow at different rates
         beginningRoot.timeToGrow = Random.Range(minSpawnTime, maxSpawnTime);
+        beginningRoot.mainRoot = true;
 
         groundRoots[0, ROOT_START_COL] = beginningRoot;
 
@@ -189,7 +193,7 @@ public class RootGenerator : MonoBehaviour
 
         // set up a timer to continue the infection
         //groundRoots[row, col].Parent.timeToGrow = Random.Range(minSpawnTime, maxSpawnTime);
-        StartCoroutine(PoisonParent(groundRoots[row, col], Random.Range(minSpawnTime, maxSpawnTime) ) );
+        StartCoroutine(PoisonParent(groundRoots[row, col], Random.Range(minInfectTime, maxInfectTime) ) );
 
     } // end PoisonRoot
 
@@ -237,16 +241,47 @@ public class RootGenerator : MonoBehaviour
 
     IEnumerator PoisonParent(RootNode<RootTypes> rootInfected, float timeToWait)
     {
-        // wait a bit then infect the parent
-        yield return(new WaitForSeconds(timeToWait) );
+        float timer = timeToWait;
 
-        // if this root has not already been pruned, then infect its parent
-        if ( (rootInfected != null) && rootInfected.infected)
+        while (timer > 0)
         {
-            if (rootInfected.Parent != null)
+            if (!gameManager.gamePaused)
             {
-                rootInfected.Parent.infected = true;
-                StartCoroutine(PoisonParent(rootInfected.Parent, Random.Range(minSpawnTime, maxSpawnTime ) ) );
+                timer -= Time.deltaTime;
+
+                // wait a bit then infect the parent
+                if (timer > 0)
+                {
+                    yield return (null);
+                }
+            }
+            else
+            {
+                yield return (null);
+            }
+        }
+
+        if (gameManager.gameRunning)
+        {
+            // if this root has not already been pruned, then infect its parent
+            if ((rootInfected != null) && rootInfected.infected)
+            {
+                if (rootInfected.Parent != null)
+                {
+                    rootInfected.Parent.infected = true;
+
+                    // if this is the main root, then time to end the game
+                    if (rootInfected.Parent.mainRoot)
+                    {
+                        gameManager.EndGame();
+                    }
+                    // otherwise prepare to poison the next parent
+                    else
+                    {
+                        // TODO: Fix the bug where the timer is going even when paused....
+                        StartCoroutine(PoisonParent(rootInfected.Parent, Random.Range(minInfectTime, maxInfectTime)));
+                    }
+                }
             }
         }
 
@@ -493,21 +528,11 @@ public class RootGenerator : MonoBehaviour
             {
                 groundSprites[row, col].GetComponent<RootEventHandler>().isMainRoot = true;
             }
-
-            //StartCoroutine(Coroutine_Refresh(groundSprites[row, col]));
         }
 
         // clean up the old sprite
         Destroy(oldGroundSprite, .05f);
 
     } // end ChangeRootSprite
-
-    /*IEnumerator Coroutine_Refresh(GameObject obj)
-    {
-        BoxCollider2D box = obj.GetComponent<BoxCollider2D>();
-        box.enabled = false;
-        yield return new WaitForSeconds(1f);
-        box.enabled = true;
-    }*/
 
 }
