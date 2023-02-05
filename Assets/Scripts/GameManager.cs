@@ -94,6 +94,7 @@ public class GameManager : MonoBehaviour
 
             // update the score based on time and level of tree (optimal is best)
             score += Time.deltaTime * ((int)TreeState.OPTIMAL_TREE - Mathf.Abs((int)TreeState.OPTIMAL_TREE - (int)treeState) );
+            pauseScoreText.text = "Score: " + (int)score;
 
             // TODO: Add sun changes (cycle?)
         }

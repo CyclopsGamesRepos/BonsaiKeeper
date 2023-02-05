@@ -62,7 +62,7 @@ public class RootGenerator : MonoBehaviour
 
     // public variables used by this script and available to others
     public static int GROUND_WIDTH = 36;
-    public static int GROUND_HEIGHT = 14;
+    public static int GROUND_HEIGHT = 15;
     public float minSpawnTime = 0.5f;
     public float maxSpawnTime = 2.5f;
     public float minInfectTime = 0.5f;
@@ -510,6 +510,7 @@ public class RootGenerator : MonoBehaviour
                                                        screenStartPosition.z);
 
                 Vector3 spritePos = cam.ScreenToWorldPoint(screenPosition);
+                spritePos.x += 0.16f;
 
                 groundSprites[row, col] = Instantiate(soilSprite, spritePos, Quaternion.identity);
             }
