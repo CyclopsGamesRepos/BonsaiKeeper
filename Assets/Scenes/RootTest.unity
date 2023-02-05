@@ -297,8 +297,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d0ac1f9748387b41ba4625ebd51d0b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  treeAnim: {fileID: 0}
   gameRunning: 0
   gamePaused: 0
+  currentNumRoots: 0
 --- !u!4 &252203138
 Transform:
   m_ObjectHideFlags: 0
@@ -1190,6 +1192,8 @@ MonoBehaviour:
   - {fileID: 4523787270250508678, guid: 07dde2a8e926abd488a3cd9a153b5a87, type: 3}
   - {fileID: 1702418573359334935, guid: 3f67466345dbff845807322b6c4c7b08, type: 3}
   infectedMaterial: {fileID: 2100000, guid: 9c5298ac48daf4a5cbb3a58c0c4b6ca0, type: 2}
+  minSpawnTime: 0.5
+  maxSpawnTime: 2.5
 --- !u!4 &1970248524
 Transform:
   m_ObjectHideFlags: 0
@@ -1309,7 +1313,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 138186906719595484, guid: eaa623806488540d1829e68a7e71447b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.13
       objectReference: {fileID: 0}
     - target: {fileID: 138186906719595484, guid: eaa623806488540d1829e68a7e71447b, type: 3}
       propertyPath: m_LocalPosition.y
