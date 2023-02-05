@@ -43,13 +43,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject gameOverScreen;
 
     // public variables used by other scripts
+    public TreeState treeState;
     public bool gameRunning;
     public bool gamePaused;
     public int currentNumRoots;
+    public float waterLevel;
 
     // private variables used by this script
-    public TreeState treeState;
-    private float waterLevel;
     private float sunLevel;
     private float score;
 
@@ -175,7 +175,5 @@ public class GameManager : MonoBehaviour
         treeAnim.SetInteger("tree state", (int)treeState);
 
     } // end UpdateTreeState
-
-
 
 }
