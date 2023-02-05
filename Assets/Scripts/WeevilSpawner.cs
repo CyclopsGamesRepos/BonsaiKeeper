@@ -14,10 +14,10 @@ public class WeevilSpawner : MonoBehaviour
     [SerializeField] float maxSpawnTime = 4.5f;
 
     // constant values for spawning this critter
-    private static float spawnOutsideRange = 5.7f;
-    private static float spawnInsideRange = 0.2f;
 
     // public variables used by this script and others
+    public float spawnOutsideRange = 5.7f;
+    public float spawnInsideRange = 0.2f;
     public int numToSpawn = 1;
 
     // private variables used by this script
