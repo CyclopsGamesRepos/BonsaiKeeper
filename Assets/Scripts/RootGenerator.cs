@@ -45,6 +45,7 @@ public class RootGenerator : MonoBehaviour
     }
 
     // constant values for creating roots
+    public static float MAX_ROOT_GROWTH = 2.5f;
     private static float HORIZONTAL_CHANCE = 0.65f;
     private static int ROOT_START_COL = 18;
 
@@ -510,6 +511,8 @@ public class RootGenerator : MonoBehaviour
                                                        screenStartPosition.z);
 
                 Vector3 spritePos = cam.ScreenToWorldPoint(screenPosition);
+
+                // offset by a bit to get it in the frame
                 spritePos.x += 0.16f;
 
                 groundSprites[row, col] = Instantiate(soilSprite, spritePos, Quaternion.identity);

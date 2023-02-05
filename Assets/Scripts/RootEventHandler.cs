@@ -39,22 +39,10 @@ public class RootEventHandler : MonoBehaviour
             if (!isMainRoot)
             {
                 rootGenerator.DoPrune(arrayRowPos, arrayColPos);
-
-                // do the animation of the scissors
-                gameManager.scissorsIcon.transform.position = transform.position;
-                gameManager.scissorsIcon.SetActive(true);
-                Invoke("EndScissors", 0.3f);
+                gameManager.ShowIcon(true);
             }
         }
 
     } // end OnMouseDown
-
-    /// <summary>
-    /// Ends the scissor animation by disabling the gameObject
-    /// </summary>
-    private void EndScissors()
-    {
-        gameManager.scissorsIcon.SetActive(false);
-    }
 
 }

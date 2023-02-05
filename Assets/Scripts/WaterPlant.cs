@@ -6,11 +6,10 @@ public class WaterPlant : MonoBehaviour
 {
     // field to adjust water level
     [Range(0f, 1f)]
-    [SerializeField] float waterMultiplier = .01f;
+    [SerializeField] float waterMultiplier = .05f;
 
     // private variables for this script
     private GameManager gameManager;
-    private float timeWatered;
     private bool watering;
 
     /// <summary>
@@ -30,7 +29,21 @@ public class WaterPlant : MonoBehaviour
     {
         if (gameManager.gameRunning && watering)
         {
-            timeWatered += Time.deltaTime;
+            if (Input.GetMouseButton(0))
+            {
+                // adjust the water in some way and reset the timer
+                gameManager.waterLevel += waterMultiplier * Time.deltaTime;
+
+                if (gameManager.waterLevel > 1)
+                {
+                    gameManager.waterLevel = 1;
+                }
+            }
+            else
+            {
+                watering = false;
+                gameManager.HideWaterCan();
+            }
         }
         
     } // end Update
@@ -43,22 +56,8 @@ public class WaterPlant : MonoBehaviour
         if (gameManager.gameRunning && !gameManager.gamePaused)
         {
             watering = true;
+            gameManager.ShowIcon(false);
         }
 
     } // end OnMouseDown
-
-    /// <summary>
-    /// When the user releases the mouse on this object stop watering
-    /// </summary>
-    private void OnMouseUp()
-    {
-        if (gameManager.gameRunning && !gameManager.gamePaused)
-        {
-            watering = false;
-
-            // adjust the water in some way and reset the timer
-            gameManager.waterLevel += waterMultiplier * timeWatered;
-            timeWatered = 0f;
-        }
-    }
 }

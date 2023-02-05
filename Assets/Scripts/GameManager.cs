@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
     private static float START_WATER_LEVEL = 0.5f;
     private static float START_SUN_LEVEL = 0.5f;
     private static float SUN_DECREASE_MULT = 0.05f;
+    private static float SUN_CHANGE_VALUE = 0.05f;
 
     private static float GAME_OVER_DELAY = 2.0f;
 
@@ -36,11 +37,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] Slider sunAnim;
     [SerializeField] TMP_Text pauseScoreText;
     [SerializeField] TMP_Text gameOverScoreText;
-    [SerializeField] TMP_Text highScoreText;
+//    [SerializeField] TMP_Text highScoreText;
 
     [Header("UI Elements for updating")]
     [SerializeField] GameObject pauseScreen;
     [SerializeField] GameObject gameOverScreen;
+    [SerializeField] RootGenerator rootGenerator;
 
     // public variables used by other scripts
     public GameObject scissorsIcon;
@@ -53,6 +55,7 @@ public class GameManager : MonoBehaviour
 
     // private variables used by this script
     private float sunLevel;
+    private float sunChange = SUN_CHANGE_VALUE;
     private float score;
 
     /// <summary>
@@ -87,9 +90,22 @@ public class GameManager : MonoBehaviour
             }
 
             // update water level sprite variable
-            waterAnim.value= waterLevel;
+            waterAnim.value = waterLevel;
+            rootGenerator.maxSpawnTime = RootGenerator.MAX_ROOT_GROWTH - waterLevel;
 
-            // TODO: Change root growth based on water levels? sun levels?
+            // Change sun level (based on cycle?)
+            sunLevel += sunChange * Time.deltaTime;
+
+            if (sunLevel < 0)
+            {
+                sunChange = SUN_CHANGE_VALUE;
+            }
+            else if (sunLevel > 1)
+            {
+                sunChange = -SUN_CHANGE_VALUE;
+            }
+
+            sunAnim.value = sunLevel;
 
             // Change Tree state
             UpdateTreeState();
@@ -147,6 +163,7 @@ public class GameManager : MonoBehaviour
 
         // invoke the game over screen after a delay
         Invoke("ShowGameOver", GAME_OVER_DELAY);
+        gameOverScoreText.text = "Score: " + (int)score;
 
     } // EndGame
 
@@ -154,7 +171,51 @@ public class GameManager : MonoBehaviour
     private void ShowGameOver()
     {
         gameOverScreen.SetActive(true);
-    }
+
+    } // end ShowGameOver
+
+    /// <summary>
+    /// Shows the scissor/water can icon at the mouse position
+    /// </summary>
+    public void ShowIcon(bool scissors)
+    {
+        // do the animation of the scissors at the mouse
+        Vector3 screenPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 5);
+        Vector3 worldPos = Camera.main.ScreenToWorldPoint(screenPosition);
+
+        if (scissors)
+        {
+            scissorsIcon.transform.position = worldPos;
+            scissorsIcon.SetActive(true);
+
+            // set it up to deactivate
+            Invoke("HideScissors", 0.5f);
+        }
+        else
+        {
+            waterIcon.transform.position = worldPos;
+            waterIcon.SetActive(true);
+        }
+
+    } // end ShowIcon
+
+    /// <summary>
+    /// Ends the water can animation by disabling the gameObject
+    /// </summary>
+    public void HideWaterCan()
+    {
+        waterIcon.SetActive(false);
+
+    } // end HideWaterCan
+
+    /// <summary>
+    /// Ends the scissor animation by disabling the gameObject
+    /// </summary>
+    private void HideScissors()
+    {
+        scissorsIcon.SetActive(false);
+
+    } // end EndScissors
 
     /// <summary>
     /// updates the current tree state based on the variables roots, water and sun
