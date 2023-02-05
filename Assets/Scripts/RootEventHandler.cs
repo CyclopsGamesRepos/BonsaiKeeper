@@ -33,9 +33,13 @@ public class RootEventHandler : MonoBehaviour
         if (gameManager.gameRunning && !gameManager.gamePaused)
         {
             // print out the position in the array so we can verify in game
-            Debug.Log("root array pos is (" + arrayRowPos + ", " + arrayColPos + ")");
+            //Debug.Log("root array pos is (" + arrayRowPos + ", " + arrayColPos + ")");
 
-            rootGenerator.DoPrune(arrayRowPos, arrayColPos);
+            // Don't prume the main root
+            if (!isMainRoot)
+            {
+                rootGenerator.DoPrune(arrayRowPos, arrayColPos);
+            }
         }
 
     } // end OnMouseDown

@@ -9,9 +9,9 @@ public class WeevilSpawner : MonoBehaviour
     [SerializeField] RootGenerator rootGenerator;
     [SerializeField] GameObject weevilPrefab;
     [Range(0.5f, 5.0f)]
-    [SerializeField] float minSpawnTime = .5f;
+    [SerializeField] float minSpawnTime = 2.5f;
     [Range(0.5f, 5.0f)]
-    [SerializeField] float maxSpawnTime = .5f;
+    [SerializeField] float maxSpawnTime = 4.5f;
 
     // constant values for spawning this critter
     private static float spawnOutsideRange = 5.7f;

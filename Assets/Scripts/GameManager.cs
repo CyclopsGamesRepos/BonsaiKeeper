@@ -25,9 +25,15 @@ public class GameManager : MonoBehaviour
     private static float START_SUN_LEVEL = 0.5f;
     private static float SUN_DECREASE_MULT = 0.2f;
 
+    private static float GAME_OVER_DELAY = 2.0f;
+
     // serialized variables for use in this script
     [Header("Data for animations")]
     [SerializeField] Animator treeAnim;
+
+    [Header("UI Elements for updating")]
+    [SerializeField] GameObject pauseScreen;
+    [SerializeField] GameObject gameOverScreen;
 
     // public variables used by other scripts
     public bool gameRunning;
@@ -112,6 +118,32 @@ public class GameManager : MonoBehaviour
         gamePaused = !gamePaused;
 
     } // end TogglePauseGame
+
+    /// <summary>
+    /// Ends the game
+    /// </summary>
+    public void EndGame()
+    {
+        // disable the pause button
+        pauseScreen.SetActive(false);
+        gamePaused = true;
+
+        // mark game as not running
+        gameRunning = false;
+
+        // start tree death animation
+        treeAnim.SetBool("isDead", true);
+
+        // invoke the game over screen after a delay
+        Invoke("ShowGameOver", GAME_OVER_DELAY);
+
+    } // EndGame
+
+    // Starts the game over screen after a delay
+    private void ShowGameOver()
+    {
+        gameOverScreen.SetActive(true);
+    }
 
     /// <summary>
     /// updates the current tree state based on the variables roots, water and sun
