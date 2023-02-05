@@ -551,6 +551,8 @@ MonoBehaviour:
   weevilPrefab: {fileID: 6755802973699408603, guid: fac7a6f7698157c44ab9ffcd750c9290, type: 3}
   minSpawnTime: 3.45
   maxSpawnTime: 5
+  spawnOutsideRange: 5.7
+  spawnInsideRange: 0.2
   numToSpawn: 1
 --- !u!1 &410113377
 GameObject:
@@ -1047,6 +1049,67 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &625637630
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6716352849083706712, guid: 3dcd6d1e6f25f7c4eb96c486c67cbd1c, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6716352849083706712, guid: 3dcd6d1e6f25f7c4eb96c486c67cbd1c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6716352849083706712, guid: 3dcd6d1e6f25f7c4eb96c486c67cbd1c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6716352849083706712, guid: 3dcd6d1e6f25f7c4eb96c486c67cbd1c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6716352849083706712, guid: 3dcd6d1e6f25f7c4eb96c486c67cbd1c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6716352849083706712, guid: 3dcd6d1e6f25f7c4eb96c486c67cbd1c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6716352849083706712, guid: 3dcd6d1e6f25f7c4eb96c486c67cbd1c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6716352849083706712, guid: 3dcd6d1e6f25f7c4eb96c486c67cbd1c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6716352849083706712, guid: 3dcd6d1e6f25f7c4eb96c486c67cbd1c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6716352849083706712, guid: 3dcd6d1e6f25f7c4eb96c486c67cbd1c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6716352849083706712, guid: 3dcd6d1e6f25f7c4eb96c486c67cbd1c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6716352849083706713, guid: 3dcd6d1e6f25f7c4eb96c486c67cbd1c, type: 3}
+      propertyPath: gameManager
+      value: 
+      objectReference: {fileID: 252203136}
+    - target: {fileID: 6716352849083706718, guid: 3dcd6d1e6f25f7c4eb96c486c67cbd1c, type: 3}
+      propertyPath: m_Name
+      value: AudioManager
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3dcd6d1e6f25f7c4eb96c486c67cbd1c, type: 3}
 --- !u!1 &685903621
 GameObject:
   m_ObjectHideFlags: 0
@@ -1729,88 +1792,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!1 &1906363954
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1906363956}
-  - component: {fileID: 1906363957}
-  m_Layer: 0
-  m_Name: AudioManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1906363956
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1906363954}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1906363957
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1906363954}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7881d04cf1a444a4e8912dfdaaeaa826, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sounds:
-  - name: Atmosphere
-    clip: {fileID: 8300000, guid: 80804890584d6834482477666eca072f, type: 3}
-    volume: 0.566
-    pitch: 1
-    loop: 1
-    source: {fileID: 0}
-  - name: MainTheme
-    clip: {fileID: 8300000, guid: 06c7bc1d7a3e4cd43afde84c3347b48c, type: 3}
-    volume: 1
-    pitch: 1
-    loop: 1
-    source: {fileID: 0}
-  - name: DangerTheme
-    clip: {fileID: 8300000, guid: 8b58e24c887a00a48a225b3a596c8aec, type: 3}
-    volume: 1
-    pitch: 1
-    loop: 1
-    source: {fileID: 0}
-  - name: ZenTheme
-    clip: {fileID: 8300000, guid: 87e9dd683766588498d237ed76d6bdaf, type: 3}
-    volume: 1
-    pitch: 1
-    loop: 1
-    source: {fileID: 0}
-  - name: DefeatEnemy
-    clip: {fileID: 8300000, guid: a8c77f3b2af2d08428208f9762e85a5c, type: 3}
-    volume: 0.518
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-  - name: Grow
-    clip: {fileID: 8300000, guid: fa2753c27d0b2e54fa7a5275f58d4b19, type: 3}
-    volume: 1
-    pitch: 1
-    loop: 0
-    source: {fileID: 0}
-  gameManager: {fileID: 252203136}
 --- !u!1 &1970248522
 GameObject:
   m_ObjectHideFlags: 0
