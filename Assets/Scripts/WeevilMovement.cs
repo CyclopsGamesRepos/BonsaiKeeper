@@ -13,12 +13,14 @@ public class WeevilMovement : MonoBehaviour
     AudioSource audioSource;
     [SerializeField] AudioClip audioClip;
     bool audioPlayed;
-    float deathOffset = 0.35f;
+    float deathOffset = 0.5f;
     float pan;
     float pitch;
 
     // private variables for this script
-    GameManager gameManager;
+    private GameManager gameManager;
+    private Animator weevilAnim;
+    private bool isAttacking;
 
     /// <summary>
     /// Start is called before the first frame update
@@ -33,6 +35,8 @@ public class WeevilMovement : MonoBehaviour
 
         // get access to the game manager so we can pause
         gameManager = GameObject.FindObjectOfType<GameManager>().GetComponent<GameManager>();
+        weevilAnim = GetComponent<Animator>();
+        isAttacking = false;
 
     } // Start
 
@@ -44,13 +48,16 @@ public class WeevilMovement : MonoBehaviour
         // keep moving up until we get to the top of the soil
         if (gameManager.gameRunning && !gameManager.gamePaused)
         {
-            if (transform.position.y < 0)
+            if (!isAttacking)
             {
-                transform.Translate(Vector2.up * speed * Time.deltaTime);
-            }
-            else
-            {
-                Destroy(gameObject);
+                if (transform.position.y < 0)
+                {
+                    transform.Translate(Vector2.up * speed * Time.deltaTime);
+                }
+                else
+                {
+                    Destroy(gameObject);
+                }
             }
         }
 
@@ -65,6 +72,10 @@ public class WeevilMovement : MonoBehaviour
         // if we collide with a root, do attack animation and poison that root
         if (other.gameObject.CompareTag("Root") )
         {
+            // animate attack
+            isAttacking = true;
+            weevilAnim.SetBool("isAttacking", isAttacking);
+
             //---------------
             // Apply Sound FX
             pan = Mathf.Clamp(transform.position.x, -1, 1);
