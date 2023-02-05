@@ -516,10 +516,13 @@ MonoBehaviour:
   highScoreText: {fileID: 0}
   pauseScreen: {fileID: 1993996761}
   gameOverScreen: {fileID: 685903621}
+  scissorsIcon: {fileID: 1565600532}
+  waterIcon: {fileID: 1209918705}
+  treeState: 0
   gameRunning: 0
   gamePaused: 0
   currentNumRoots: 0
-  treeState: 0
+  waterLevel: 0
 --- !u!4 &252203138
 Transform:
   m_ObjectHideFlags: 0
@@ -1433,6 +1436,72 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1001 &1209918704
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 7622032992917377000, guid: 8fd40585c85c1414f9a20a13f69de910, type: 3}
+      propertyPath: m_Name
+      value: water trigger
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622032992917377000, guid: 8fd40585c85c1414f9a20a13f69de910, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622032992917377002, guid: 8fd40585c85c1414f9a20a13f69de910, type: 3}
+      propertyPath: m_RootOrder
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622032992917377002, guid: 8fd40585c85c1414f9a20a13f69de910, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.69
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622032992917377002, guid: 8fd40585c85c1414f9a20a13f69de910, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -2.18
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622032992917377002, guid: 8fd40585c85c1414f9a20a13f69de910, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622032992917377002, guid: 8fd40585c85c1414f9a20a13f69de910, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622032992917377002, guid: 8fd40585c85c1414f9a20a13f69de910, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622032992917377002, guid: 8fd40585c85c1414f9a20a13f69de910, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622032992917377002, guid: 8fd40585c85c1414f9a20a13f69de910, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622032992917377002, guid: 8fd40585c85c1414f9a20a13f69de910, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622032992917377002, guid: 8fd40585c85c1414f9a20a13f69de910, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622032992917377002, guid: 8fd40585c85c1414f9a20a13f69de910, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8fd40585c85c1414f9a20a13f69de910, type: 3}
+--- !u!1 &1209918705 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7622032992917377000, guid: 8fd40585c85c1414f9a20a13f69de910, type: 3}
+  m_PrefabInstance: {fileID: 1209918704}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1258186055
 GameObject:
   m_ObjectHideFlags: 0
@@ -1643,6 +1712,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72d2d71a4b2d115409f85dfc1ef0f6c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  waterMultiplier: 0.01
 --- !u!65 &1487126059
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1671,6 +1741,72 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1565600531
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6844289919410920202, guid: e9559230fa577492e8849e20c762c517, type: 3}
+      propertyPath: m_RootOrder
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 6844289919410920202, guid: e9559230fa577492e8849e20c762c517, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.5171608
+      objectReference: {fileID: 0}
+    - target: {fileID: 6844289919410920202, guid: e9559230fa577492e8849e20c762c517, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.7468393
+      objectReference: {fileID: 0}
+    - target: {fileID: 6844289919410920202, guid: e9559230fa577492e8849e20c762c517, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6844289919410920202, guid: e9559230fa577492e8849e20c762c517, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.99999887
+      objectReference: {fileID: 0}
+    - target: {fileID: 6844289919410920202, guid: e9559230fa577492e8849e20c762c517, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6844289919410920202, guid: e9559230fa577492e8849e20c762c517, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6844289919410920202, guid: e9559230fa577492e8849e20c762c517, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.0015307718
+      objectReference: {fileID: 0}
+    - target: {fileID: 6844289919410920202, guid: e9559230fa577492e8849e20c762c517, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6844289919410920202, guid: e9559230fa577492e8849e20c762c517, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6844289919410920202, guid: e9559230fa577492e8849e20c762c517, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -0.175
+      objectReference: {fileID: 0}
+    - target: {fileID: 6844289919410920203, guid: e9559230fa577492e8849e20c762c517, type: 3}
+      propertyPath: m_Name
+      value: Scissors trigger
+      objectReference: {fileID: 0}
+    - target: {fileID: 6844289919410920203, guid: e9559230fa577492e8849e20c762c517, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e9559230fa577492e8849e20c762c517, type: 3}
+--- !u!1 &1565600532 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6844289919410920203, guid: e9559230fa577492e8849e20c762c517, type: 3}
+  m_PrefabInstance: {fileID: 1565600531}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1594788612
 GameObject:
   m_ObjectHideFlags: 0
@@ -1939,7 +2075,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: dbb8b469cf6091044b16ac0d225e541d, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0

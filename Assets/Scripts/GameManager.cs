@@ -43,6 +43,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject gameOverScreen;
 
     // public variables used by other scripts
+    public GameObject scissorsIcon;
+    public GameObject waterIcon;
     public TreeState treeState;
     public bool gameRunning;
     public bool gamePaused;
