@@ -551,6 +551,8 @@ MonoBehaviour:
   weevilPrefab: {fileID: 6755802973699408603, guid: fac7a6f7698157c44ab9ffcd750c9290, type: 3}
   minSpawnTime: 3.45
   maxSpawnTime: 5
+  spawnOutsideRange: 5.7
+  spawnInsideRange: 0.2
   numToSpawn: 1
 --- !u!1 &410113377
 GameObject:
